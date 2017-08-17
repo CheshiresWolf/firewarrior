@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterControllerScript : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     //переменная для установки макс. скорости персонажа
     public float maxSpeed = 10f; 
@@ -26,8 +26,10 @@ public class CharacterControllerScript : MonoBehaviour
         //-1 возвращается при нажатии на клавиатуре стрелки влево (или клавиши А),
         //1 возвращается при нажатии на клавиатуре стрелки вправо (или клавиши D)
         //float move = Input.GetAxis("Horizontal");
+		//Debug.Log("FixedUpdate");
 
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) {
+			//Debug.Log("FixedUpdate | touch");
             // Get movement of the finger since last frame
             Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
 			float move = touchDeltaPosition.x;
@@ -38,7 +40,7 @@ public class CharacterControllerScript : MonoBehaviour
 
 	        //обращаемся к компоненту персонажа RigidBody2D. задаем ему скорость по оси Х, 
 	        //равную значению оси Х умноженное на значение макс. скорости
-	        rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
+//	        rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
 
 	        //если нажали клавишу для перемещения вправо, а персонаж направлен влево
 	        if (move > 0 && !isFacingRight) {
