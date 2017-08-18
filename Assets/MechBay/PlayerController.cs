@@ -4,16 +4,20 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     //переменная для установки макс. скорости персонажа
-    public float maxSpeed = 10f; 
+    public float maxSpeed = 1f; 
     //переменная для определения направления персонажа вправо/влево
     private bool isFacingRight = true;
     //ссылка на компонент анимаций
     private Animator anim;
     private Rigidbody2D rigidbody2D;
 
+	private float half_width;
+
 	private void Start() {
         anim = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+		half_width = Screen.width / 2.0f;
     }
 	
     /// <summary>
@@ -27,30 +31,26 @@ public class PlayerController : MonoBehaviour
         //1 возвращается при нажатии на клавиатуре стрелки вправо (или клавиши D)
         //float move = Input.GetAxis("Horizontal");
 		//Debug.Log("FixedUpdate");
+		float x = 0.0f;
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) {
-			//Debug.Log("FixedUpdate | touch");
-            // Get movement of the finger since last frame
-            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-			float move = touchDeltaPosition.x;
+		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
+			Vector2 touchPosition = Input.GetTouch(0).position;
 
-	        //в компоненте анимаций изменяем значение параметра Speed на значение оси Х.
-	        //приэтом нам нужен модуль значения
-	        anim.SetFloat("Speed", Mathf.Abs(move));
+			Debug.Log("touchDeltaPosition : " + touchPosition);
+			x = (touchPosition.x < half_width) ? -maxSpeed : maxSpeed;
 
-	        //обращаемся к компоненту персонажа RigidBody2D. задаем ему скорость по оси Х, 
-	        //равную значению оси Х умноженное на значение макс. скорости
-//	        rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
+			rigidbody2D.velocity = new Vector2(x, rigidbody2D.velocity.y);
 
-	        //если нажали клавишу для перемещения вправо, а персонаж направлен влево
-	        if (move > 0 && !isFacingRight) {
-	            //отражаем персонажа вправо
-	            Flip();
-	        //обратная ситуация. отражаем персонажа влево
-	        } else if (move < 0 && isFacingRight) {
-	            Flip();
-	        }
-	    }
+			if (x > 0 && !isFacingRight) {
+				//отражаем персонажа вправо
+				Flip();
+				//обратная ситуация. отражаем персонажа влево
+			} else if (x < 0 && isFacingRight) {
+				Flip();
+			}
+		}
+
+		anim.SetFloat("Speed", Mathf.Abs(x));
     }
 
     /// <summary>
