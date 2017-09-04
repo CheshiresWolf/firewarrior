@@ -2,8 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MechBay/PlayerController.cs">
     <Files>
-      <File FileName="Assets/MechBay/PlayerController.cs" Line="1" Column="1" />
-      <File FileName="Assets/MechBay/Main.cs" Line="1" Column="1" />
+      <File FileName="Assets/MechBay/PlayerController.cs" Line="31" Column="30" />
+      <File FileName="Assets/MechBay/PointerController.cs" Line="14" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour {
+	public GameObject Pointer;
+	private PointerController pointerController;
+
     //переменная для установки макс. скорости персонажа
-    public float maxSpeed = 1f; 
+    private float maxSpeed = 1.0f; 
     //переменная для определения направления персонажа вправо/влево
-    private bool isFacingRight = true;
+    private bool isFacingRight = false;
     //ссылка на компонент анимаций
     private Animator anim;
     private Rigidbody2D rigidbody2D;
@@ -18,6 +20,8 @@ public class PlayerController : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
 
 		half_width = Screen.width / 2.0f;
+
+		pointerController = Pointer.GetComponent<PointerController>();
     }
 	
     /// <summary>
@@ -33,8 +37,10 @@ public class PlayerController : MonoBehaviour
 		//Debug.Log("FixedUpdate");
 		float x = 0.0f;
 
-		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
-			Vector2 touchPosition = Input.GetTouch(0).position;
+		if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began)) {
+			Vector2 touchPosition = Input.GetMouseButtonUp(0) ? (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) : Input.GetTouch(0).position;
+
+			pointerController.showPointer(new Vector2 (touchPosition.x, -2.5f));
 
 			Debug.Log("touchDeltaPosition : " + touchPosition);
 			x = (touchPosition.x < half_width) ? -maxSpeed : maxSpeed;
@@ -57,6 +63,8 @@ public class PlayerController : MonoBehaviour
     /// Метод для смены направления движения персонажа и его зеркального отражения
     /// </summary>
     private void Flip() {
+        Debug.Log("Flip");
+
         //меняем направление движения персонажа
         isFacingRight = !isFacingRight;
         //получаем размеры персонажа
